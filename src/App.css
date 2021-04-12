@@ -36,3 +36,23 @@
     transform: rotate(360deg);
   }
 }
+
+/* Left Panel Styles */
+.leftPanel {
+  background-color: #282c34;
+  height: 100%;
+  position: fixed;
+  top: 0px;
+  width: 3%;
+  z-index: 100;
+}
+.topContainer{
+  position: relative;
+  top: 0%;
+  left: -50%;
+}
+.bottomContainer{
+  position: relative;
+  top: 50%;
+  left: -50%;
+}
