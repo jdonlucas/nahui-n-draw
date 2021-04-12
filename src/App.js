@@ -1,11 +1,11 @@
 import './App.css';
 import LeftPanel from './components/leftPanel/LeftPanel';
-import Canvas from './components/canvas/Canvas';
+import CanvasContainer from './components/canvas/CanvasContainer';
 
 function App() {
   return (
     <>
-      <Canvas />
+      <CanvasContainer />
       <LeftPanel />
     </>
   );
