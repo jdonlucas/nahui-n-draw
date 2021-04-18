@@ -1,11 +1,22 @@
 import React from 'react';
 
-export default function LeftPanel(){
+export default function LeftPanel({setBrushColor, setBrushRadius, toggleHandler, showGrid}){
+
+    const radiusHandler = (e) => {
+        setBrushRadius(10);
+    }
+
+
     return ( <>
         <div className="leftPanel">
             <ul className="topContainer">
-                <button> 1</button>
-                <button> 2</button>
+                <button onClick={radiusHandler}>
+                    1
+                </button>
+                <button onClick={toggleHandler}> 
+                    2
+                    {showGrid ? console.log("1") : console.log("2")}
+                </button>
                 <button> 3</button>
                 <button> 4</button>
                 <button> 5</button>

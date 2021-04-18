@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import CanvasDraw from 'react-canvas-draw';
 
-function Canvas() {
+function Canvas({ color, radius, showGrid }) {
 
      const firstCanvas = useRef(null);
      const  clear= () => {
@@ -25,14 +25,13 @@ function Canvas() {
                
                <CanvasDraw
                ref={firstCanvas}
-               brushRadius={1}
-               lazyRadius={5}
-               brushColor='#444'
+               brushRadius={radius}
+               lazyRadius={1}
+               brushColor={color}
                catenaryColor='#cccc'
-               hideGrid={false}
+               hideGrid={showGrid}
                canvasHeight={window.innerHeight}
                canvasWidth={window.innerWidth}
-               
                />
           </div>
      );
