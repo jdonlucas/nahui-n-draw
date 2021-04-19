@@ -1,10 +1,20 @@
 import React from 'react';
+import { SketchPicker } from 'react-color';
+import {useAtom} from 'jotai';
+import {showGridAtom} from '../../state';   
 
-export default function LeftPanel({setBrushColor, setBrushRadius, toggleHandler, showGrid}){
+
+export default function LeftPanel({setBrushColor, setBrushRadius}){
+
+    const [showGrid, setShowGrid] = useAtom(showGridAtom)
 
     const radiusHandler = (e) => {
         setBrushRadius(10);
     }
+    const toggleHandler = () => {
+        //showGrid ? setShowGrid(false) : setShowGrid(true);
+        setShowGrid(!showGrid)
+   }
 
 
     return ( <>

@@ -3,7 +3,7 @@ import { css, jsx } from '@emotion/react';
 import React from 'react'
 import Canvas from './Canvas'
 
-const CanvasContainer = ({setBrushColor, setBrushRadius, setShowGrid, color, radius, showGrid}) =>{
+const CanvasContainer = ({setBrushColor, setBrushRadius, color, radius}) =>{
 
     return (
         <div css={css`
@@ -12,10 +12,8 @@ const CanvasContainer = ({setBrushColor, setBrushRadius, setShowGrid, color, rad
             <Canvas
              setBrushColor={setBrushColor}
              setBrushRadius={setBrushRadius}
-             setShowGrid={setShowGrid}
              color={color}
              radius={radius}
-             showGrid={showGrid}
             />
         </div>
     )

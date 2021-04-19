@@ -1,7 +1,11 @@
 import React, { useRef } from 'react';
 import CanvasDraw from 'react-canvas-draw';
+import {useAtom} from 'jotai';
+import {showGridAtom} from '../../state';
 
-function Canvas({ color, radius, showGrid }) {
+function Canvas({ color, radius }) {
+
+     const [showGrid] = useAtom(showGridAtom)
 
      const firstCanvas = useRef(null);
      const  clear= () => {
@@ -24,6 +28,7 @@ function Canvas({ color, radius, showGrid }) {
                </button>
                
                <CanvasDraw
+               key={`id-${showGrid}`}
                ref={firstCanvas}
                brushRadius={radius}
                lazyRadius={1}
