@@ -1,15 +1,12 @@
-import React, { useRef, useEffect, useCallback} from 'react';
+import React, { useRef } from 'react';
 import CanvasDraw from 'react-canvas-draw';
 import {useAtom} from 'jotai';
-import {showGridAtom, drawDataAtom} from '../../state';
+import {colorAtom} from '../../state';
 
 
-function Canvas({ color, radius }) {
+function Canvas({ radius }) {
 
-
-
-     const [showGrid] = useAtom(showGridAtom)
-     const [drawData, setDrawData] = useAtom(drawDataAtom)
+     const [color] = useAtom(colorAtom)
 
      const firstCanvas = useRef(null);
 
@@ -21,14 +18,6 @@ function Canvas({ color, radius }) {
        firstCanvas.current.undo();
      } 
 
-
-     const drawCallback = useCallback(() =>{
-          setDrawData(firstCanvas.current.lines)
-     })
-
-     useEffect(() => {
-          firstCanvas.current.lines = drawData;
-     })
 
      return(
           <div>
@@ -42,14 +31,12 @@ function Canvas({ color, radius }) {
                </button>
                
                <CanvasDraw
-               key={`id-${showGrid}`}
                ref={firstCanvas}
-               onChange={drawCallback}
                brushRadius={radius}
                lazyRadius={1}
                brushColor={color}
-               catenaryColor='#cccc'
-               hideGrid={showGrid}
+               catenaryColor='#3c3c3c'
+               hideGrid={true}
                canvasHeight={window.innerHeight}
                canvasWidth={window.innerWidth}
                />
