@@ -3,7 +3,10 @@ import { css,jsx } from '@emotion/react';
 import React, { useState } from 'react';
 import { ChromePicker } from 'react-color';
 import {useAtom} from 'jotai';
-import {showGridAtom, colorAtom, radiusAtom} from '../../state';   
+import {showGridAtom, colorAtom, radiusAtom} from '../../state';
+
+import { faPencilAlt, faPalette, faEraser } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 export default function LeftPanel(){
@@ -30,7 +33,7 @@ export default function LeftPanel(){
         <div className="leftPanel">
             <ul className="topContainer">
                 <button onClick={() => setShowBrushSize(!showBrushSize)} className="leftPanel-Button">
-                    Size
+                    <FontAwesomeIcon icon={faPencilAlt} />
                 </button>
                 <div css={css`
                     position: absolute;
@@ -43,7 +46,7 @@ export default function LeftPanel(){
                 </div>
 
                 <button onClick={() => setShowColor(!showColor)} className="leftPanel-Button"> 
-                    Color
+                    <FontAwesomeIcon icon={faPalette} />
                 </button>
                 <div css={css`
                     position: absolute;
@@ -58,7 +61,7 @@ export default function LeftPanel(){
                         />
                 </div>
                 <button onClick={eraserHandler} className="leftPanel-Button"> 
-                    Eraser
+                    <FontAwesomeIcon icon={faEraser} />
                 </button>
                 <button className="leftPanel-Button"> 5</button>
             </ul>

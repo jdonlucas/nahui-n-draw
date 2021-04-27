@@ -3,6 +3,8 @@ import CanvasDraw from 'react-canvas-draw';
 import {useAtom} from 'jotai';
 import {colorAtom, radiusAtom} from '../../state';
 
+import { faTrashAlt, faUndo } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Canvas() {
 
@@ -24,11 +26,11 @@ function Canvas() {
           <div>
                
                <button onClick={clear}>
-                    ALV
+                    <FontAwesomeIcon icon={faTrashAlt} />
                </button>
 
                <button onClick={undo}>
-                    Undo
+                    <FontAwesomeIcon icon={faUndo} />
                </button>
                
                <CanvasDraw
