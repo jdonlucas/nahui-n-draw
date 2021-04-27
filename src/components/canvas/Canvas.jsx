@@ -1,12 +1,13 @@
 import React, { useRef } from 'react';
 import CanvasDraw from 'react-canvas-draw';
 import {useAtom} from 'jotai';
-import {colorAtom} from '../../state';
+import {colorAtom, radiusAtom} from '../../state';
 
 
-function Canvas({ radius }) {
+function Canvas() {
 
      const [color] = useAtom(colorAtom)
+     const [radius] = useAtom(radiusAtom)
 
      const firstCanvas = useRef(null);
 

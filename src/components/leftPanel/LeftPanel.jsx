@@ -3,28 +3,46 @@ import { css,jsx } from '@emotion/react';
 import React, { useState } from 'react';
 import { ChromePicker } from 'react-color';
 import {useAtom} from 'jotai';
-import {showGridAtom, colorAtom} from '../../state';   
+import {showGridAtom, colorAtom, radiusAtom} from '../../state';   
 
 
-export default function LeftPanel({setBrushColor, setBrushRadius}){
+export default function LeftPanel(){
 
-    const [showGrid, setShowGrid] = useAtom(showGridAtom)
     const [color, setColor] = useAtom(colorAtom)
+    const [radius, setRadius] = useAtom(radiusAtom)
 
     const [showColor, setShowColor] = useState(false);
+    const [showBrushSize, setShowBrushSize] = useState(false);
+
 
     const radiusHandler = (e) => {
-        setBrushRadius(10);
+        console.log(e.target.value);
+        setRadius(e.target.value);
+    }
+
+    const eraserHandler = (e) => {
+        setColor("#FFFF");
+        setRadius(10);
     }
 
 
     return ( <>
         <div className="leftPanel">
             <ul className="topContainer">
-                <button onClick={radiusHandler}>
-                    1
+                <button onClick={() => setShowBrushSize(!showBrushSize)} className="leftPanel-Button">
+                    Size
                 </button>
-                <button onClick={() => setShowColor(!showColor)}> 
+                <div css={css`
+                    position: absolute;
+                    z-index: 9999999;
+                    right: -268px;
+                    top: 45px;
+                    display: ${showBrushSize ? 'block' : 'none'};
+                `}>
+                    <input onChange={radiusHandler} type="range" min="1" max="20" />
+                </div>
+
+                <button onClick={() => setShowColor(!showColor)} className="leftPanel-Button"> 
                     Color
                 </button>
                 <div css={css`
@@ -39,8 +57,10 @@ export default function LeftPanel({setBrushColor, setBrushRadius}){
                             onChangeComplete={ (color) => setColor(color.hex) }
                         />
                 </div>
-                <button> 4</button>
-                <button> 5</button>
+                <button onClick={eraserHandler} className="leftPanel-Button"> 
+                    Eraser
+                </button>
+                <button className="leftPanel-Button"> 5</button>
             </ul>
             <ul className="bottomContainer">
                 <button> 6</button>

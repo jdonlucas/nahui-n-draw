@@ -9,7 +9,6 @@ function App() {
 
    //STATE
    const [color, setBrushColor] = useState("");
-   const [radius, setBrushRadius] = useState(1);
 
   return (
     <div css={css`
@@ -18,12 +17,9 @@ function App() {
     `}>
       <LeftPanel 
         setBrushColor={setBrushColor}
-        setBrushRadius={setBrushRadius}
       />
       <CanvasContainer 
         setBrushColor={setBrushColor}
-        setBrushRadius={setBrushRadius}
-        radius={radius}
       />
     </div>
   );
