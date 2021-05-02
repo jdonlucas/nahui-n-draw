@@ -2,16 +2,6 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
 
 .App-header {
   background-color: #282c34;
@@ -28,25 +18,31 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
 
 /* Left Panel Styles */
 .leftPanel {
   background-color: #282c34;
-  height: 100%;
-  width: 57px;
+  height: 100vh;
+  width: 5rem;
 }
 .topContainer{
   position: relative;
-  top: 0%;
-  left: -50%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.leftPanel-Button{
+  padding: 1rem;
+}
+.leftPanel-Button:hover{
+  background-color: lightblue;
+}
+
+.leftPanel-icon:hover{
+  color: #4f6799;
 }
 .bottomContainer{
   position: relative;

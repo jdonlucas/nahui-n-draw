@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { ChromePicker } from 'react-color';
 import {useAtom} from 'jotai';
 import {showGridAtom, colorAtom, radiusAtom} from '../../state';
-
+//FontAwesome
 import { faPencilAlt, faPalette, faEraser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -20,6 +20,7 @@ export default function LeftPanel(){
 
     const radiusHandler = (e) => {
         console.log(e.target.value);
+
         setRadius(e.target.value);
     }
 
@@ -32,26 +33,29 @@ export default function LeftPanel(){
     return ( <>
         <div className="leftPanel">
             <ul className="topContainer">
-                <button onClick={() => setShowBrushSize(!showBrushSize)} className="leftPanel-Button">
-                    <FontAwesomeIcon icon={faPencilAlt} />
-                </button>
+                <div onClick={() => setShowBrushSize(!showBrushSize)} className="leftPanel-Button">
+                    <FontAwesomeIcon icon={faPencilAlt} className="leftPanel-icon" color="white" size="2x"/>
+                </div>
                 <div css={css`
                     position: absolute;
                     z-index: 9999999;
-                    right: -268px;
-                    top: 45px;
+                    right: -15rem;
+                    top: 2rem;
+                    border-radius: 2px;
+                    box-shadow: 1px 1px 2px rgb(0 0 0 / 30%);
                     display: ${showBrushSize ? 'block' : 'none'};
                 `}>
-                    <input onChange={radiusHandler} type="range" min="1" max="20" />
+                    Brush Size
+                    <input onChange={radiusHandler} type="range" min="1" max="20" step="1"/>
                 </div>
 
-                <button onClick={() => setShowColor(!showColor)} className="leftPanel-Button"> 
-                    <FontAwesomeIcon icon={faPalette} />
-                </button>
+                <div onClick={() => setShowColor(!showColor)} className="leftPanel-Button"> 
+                    <FontAwesomeIcon icon={faPalette} className="leftPanel-icon" color="white" size="2x"/>
+                </div>
                 <div css={css`
                     position: absolute;
                     z-index: 9999999;
-                    right: -268px;
+                    right: -15rem;
                     top: 45px;
                     display: ${showColor ? 'block' : 'none'};
                 `}>
@@ -60,10 +64,10 @@ export default function LeftPanel(){
                             onChangeComplete={ (color) => setColor(color.hex) }
                         />
                 </div>
-                <button onClick={eraserHandler} className="leftPanel-Button"> 
-                    <FontAwesomeIcon icon={faEraser} />
-                </button>
-                <button className="leftPanel-Button"> 5</button>
+
+                <div onClick={eraserHandler} className="leftPanel-Button"> 
+                    <FontAwesomeIcon icon={faEraser} className="leftPanel-icon" color="white" size="2x"/>
+                </div>
             </ul>
             <ul className="bottomContainer">
                 <button> 6</button>

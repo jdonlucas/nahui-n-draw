@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import CanvasDraw from 'react-canvas-draw';
 import {useAtom} from 'jotai';
 import {colorAtom, radiusAtom} from '../../state';
-
+//FontAwesome
 import { faTrashAlt, faUndo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
