@@ -28,10 +28,8 @@ function Canvas() {
 
      const downloadToSVG = () => {
           if(firstCanvas.current) {
-               console.log(firstCanvas.current.canvas.drawing)
                domtoimage.toJpeg(firstCanvas.current.canvas.drawing, { quality: 0.95 })
                     .then(function (dataUrl) {
-                         console.log("sdfs")
                         var link = document.createElement('a');
                         link.download = 'my-image-name.jpeg';
                         link.href = dataUrl;
