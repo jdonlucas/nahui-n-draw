@@ -3,9 +3,9 @@ import { css,jsx } from '@emotion/react';
 import React, { useState } from 'react';
 import { ChromePicker } from 'react-color';
 import {useAtom} from 'jotai';
-import {showGridAtom, colorAtom, radiusAtom} from '../../state';
+import {showGridAtom, colorAtom, radiusAtom, showModal} from '../../state';
 //FontAwesome
-import { faPencilAlt, faPalette, faEraser } from "@fortawesome/free-solid-svg-icons";
+import { faPencilAlt, faPalette, faEraser, faSave } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
@@ -13,6 +13,7 @@ export default function LeftPanel(){
 
     const [color, setColor] = useAtom(colorAtom)
     const [radius, setRadius] = useAtom(radiusAtom)
+    const [show, setShow] = useAtom(showModal);
 
     const [showColor, setShowColor] = useState(false);
     const [showBrushSize, setShowBrushSize] = useState(false);
@@ -70,11 +71,9 @@ export default function LeftPanel(){
                 </div>
             </ul>
             <ul className="bottomContainer">
-                <button> 6</button>
-                <button> 7</button>
-                <button> 8</button>
-                <button> 9</button>
-                <button> 10</button>
+                <div onClick={() => setShow(!show)} className="leftPanel-Button"> 
+                    <FontAwesomeIcon icon={faSave} className="leftPanel-icon" color="white" size="2x"/>
+                </div>
             </ul>
         </div>
     </> )
