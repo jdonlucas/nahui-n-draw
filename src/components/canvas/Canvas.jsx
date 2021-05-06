@@ -18,7 +18,7 @@ function Canvas() {
 
      const firstCanvas = useRef(null);
 
-     const  clear= () => {
+     const  clear = () => {
        firstCanvas.current.clear();
      }
    
@@ -53,15 +53,16 @@ function Canvas() {
      return(
           <>
                <div>
+                    <div className="canvasButton-container">
+                         
+                         <div onClick={clear} className="canvas-button">
+                              <FontAwesomeIcon icon={faTrashAlt} className="canvas-icon" color="white" size="lg"/>
+                         </div>
 
-                    <button onClick={clear}>
-                         <FontAwesomeIcon icon={faTrashAlt} />
-                    </button>
-
-                    <button onClick={undo}>
-                         <FontAwesomeIcon icon={faUndo} />
-                    </button>
-
+                         <div onClick={undo} className="canvas-button">
+                              <FontAwesomeIcon icon={faUndo} className="canvas-icon" color="white" size="lg"/>
+                         </div>
+                    </div>
                     <CanvasDraw
                     ref={firstCanvas}
                     brushRadius={radius}
