@@ -39,7 +39,7 @@ function Canvas() {
      }
      const downloadToJPEG = () => {
           if(firstCanvas.current) {
-               domtoimage.toSvg(firstCanvas.current)
+               domtoimage.toSvg(firstCanvas.current.canvas.drawing, { quality: 0.95 })
                     .then(function (dataUrl) {
                         var link = document.createElement('a');
                         link.download = 'my-image-name.svg';

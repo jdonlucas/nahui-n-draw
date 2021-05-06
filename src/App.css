@@ -66,11 +66,13 @@
 
 /*Canvas styles*/
 .canvasButton-container{
-  padding: 0;
-  margin: 0;
+  align-items: flex-start;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  margin: 0;
+  position: fixed;
+  padding: 0;
+  z-index: 20;
 }
 .canvas-button{
   padding: 0.5rem;
