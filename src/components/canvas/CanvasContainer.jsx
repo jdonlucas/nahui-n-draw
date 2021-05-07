@@ -8,6 +8,7 @@ const CanvasContainer = () =>{
     return (
         <div css={css`
             width: calc(100vw - 57px);
+            overflow: auto;
         `}>
             <Canvas />
         </div>

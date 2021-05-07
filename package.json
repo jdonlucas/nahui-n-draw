@@ -23,7 +23,7 @@
     "react-color": "^2.19.3",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
-    "react-zoom-pan": "^0.1.48",
+    "react-zoom-pan-pinch": "^1.6.1",
     "style-loader": "^2.0.0",
     "web-vitals": "^1.0.1"
   },

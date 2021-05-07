@@ -68,17 +68,21 @@
 .canvasButton-container{
   align-items: flex-start;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   margin: 0;
   position: fixed;
   padding: 0;
   z-index: 20;
+  right: 30px;
+  bottom: 34px;
 }
 .canvas-button{
   padding: 0.5rem;
   cursor: pointer;
   border-radius: 50%;
+  margin: 5px;
   background-color: #282c34;
+  box-shadow: 2px 2px 1px 0px #c3c1c1;
 }
 .canvas-button:hover{
   background-color: lightblue;
