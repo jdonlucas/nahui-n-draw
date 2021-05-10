@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx,css } from '@emotion/react';
-import React, { useRef, createRef, Fragment } from 'react';
+import React, { useRef, createRef, Fragment, useEffect } from 'react';
 import CanvasDraw from 'react-canvas-draw';
 import {useAtom} from 'jotai';
 import {colorAtom, radiusAtom} from '../../state';
@@ -64,7 +64,66 @@ function Canvas() {
                     });
           }
      }
-     console.log(typeof window.innerHeight)
+     
+     var context;
+     var originx = 0;
+     var originy = 0;
+     var scale = 1;
+
+     useEffect(() => {
+          if(firstCanvas.current) {
+               console.log(firstCanvas.current.canvas)
+               context = firstCanvas.current.canvas.interface.getContext("2d");
+          }
+     });
+
+     const zoomIn = () => {
+          if(context) { 
+               let canvas = firstCanvas.current.canvas.interface;
+               var centerx = canvas.width/2;
+               var centery = canvas.height/2;
+           
+               var zoom = 1.5;
+           
+               context.translate(
+                   originx,
+                   originy
+               );
+               context.scale(1,1);
+               context.translate(
+                   -( centerx / scale + originx - centerx / ( scale * zoom ) ),
+                   -( centery / scale + originy - centery / ( scale * zoom ) )
+               );
+           
+               originx = ( centerx / scale + originx - centerx / ( scale * zoom ) );
+               originy = ( centery / scale + originy - centery / ( scale * zoom ) );
+               scale *= 1;
+          }
+     }
+     
+     const zoomOut = () => {
+          if(context) { 
+               let canvas = firstCanvas.current.canvas.drawing;
+               var centerx = canvas.width/2;
+               var centery = canvas.height/2;
+               var zoom = -1.5;
+           
+               context.translate(
+                   originx,
+                   originy
+               );
+               context.scale(-1,-1);
+               context.translate(
+                   -( centerx / scale + originx - centerx / ( scale * zoom ) ),
+                   -( centery / scale + originy - centery / ( scale * zoom ) )
+               );
+           
+               originx = ( centerx / scale + originx - centerx / ( scale * zoom ) );
+               originy = ( centery / scale + originy - centery / ( scale * zoom ) );
+               scale *= -1;
+          }
+     }
+          
 
      return(
           <>
@@ -72,15 +131,6 @@ function Canvas() {
                   background: gray;
                   width: fit-content;
                `}>
-                    <TransformWrapper 
-                         defaultScale={0.5}
-                         defaultPositionX={0}
-                         defaultPositionY={0}
-                         options={options}
-                         wheel={wheel}
-                         pan={pan}
-                         scalePadding={padding}>
-                         {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
                               <Fragment>
                                    <div className="canvasButton-container tools">
                                         <div onClick={zoomIn} className="canvas-button">
@@ -97,7 +147,6 @@ function Canvas() {
                                              <FontAwesomeIcon icon={faUndo} className="canvas-icon" color="white" size="lg"/>
                                         </div>
                                    </div>
-                                   <TransformComponent>
                                         <CanvasDraw
                                              ref={firstCanvas}
                                              brushRadius={radius}
@@ -108,10 +157,7 @@ function Canvas() {
                                              canvasHeight={window.innerHeight}
                                              canvasWidth={window.innerWidth}
                                         />
-                                   </TransformComponent>
                               </Fragment>
-                         )}
-                    </TransformWrapper>
                </div>
                <Modal>
                     <div css={css`
