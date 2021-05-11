@@ -76,7 +76,21 @@ function Canvas() {
                context = firstCanvas.current.canvas.interface.getContext("2d");
           }
      });
-
+// 
+     // var canvas = document.getElementById("newCanvas");
+     // var context1 = canvas.getContext("2d");
+     // var scale = 1;
+     // var originx = 0;
+     // var originy = 0;
+// 
+     // function draw(){
+          // context.fillStyle = "white";
+          // context.fillRect(originx,originy,800/scale,600/scale);
+          // context.fillStyle = "black";
+          // context.fillRect(50,50,100,100);
+     //  }
+     //  setInterval(draw,100);
+// 
      const zoomIn = () => {
           if(context) { 
                let canvas = firstCanvas.current.canvas.interface;
@@ -147,16 +161,9 @@ function Canvas() {
                                              <FontAwesomeIcon icon={faUndo} className="canvas-icon" color="white" size="lg"/>
                                         </div>
                                    </div>
-                                        <CanvasDraw
-                                             ref={firstCanvas}
-                                             brushRadius={radius}
-                                             lazyRadius={1}
-                                             brushColor={color}
-                                             catenaryColor='#3c3c3c'
-                                             hideGrid={true}
-                                             canvasHeight={window.innerHeight}
-                                             canvasWidth={window.innerWidth}
-                                        />
+                                        <canvas id="newCanvas">
+
+                                        </canvas>
                               </Fragment>
                </div>
                <Modal>
