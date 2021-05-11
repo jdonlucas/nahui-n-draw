@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx,css } from '@emotion/react';
-import React, { useRef, createRef, Fragment, useEffect } from 'react';
+import React, { useRef, createRef, Fragment, useEffect, useState } from 'react';
 import CanvasDraw from 'react-canvas-draw';
 import {useAtom} from 'jotai';
 import {colorAtom, radiusAtom} from '../../state';
@@ -18,21 +18,9 @@ function Canvas() {
      const [color] = useAtom(colorAtom)
      const [radius] = useAtom(radiusAtom)
 
-     const firstCanvas = useRef(null);
+     const [scale,setScale] = useState(1);
 
-     const options = {
-          minScale: 0.5,
-          limitToBounds: false,
-     }
-     const wheel = {
-          disabled: true
-     }
-     const pan = {
-          disabled: true
-     }
-     const padding = {
-          size: 4
-     }
+     const firstCanvas = useRef(null);
 
      const  clear = () => {
        firstCanvas.current.clear();
@@ -65,76 +53,82 @@ function Canvas() {
           }
      }
      
-     var context;
-     var originx = 0;
-     var originy = 0;
-     var scale = 1;
+     var canvas, ctx, flag = false,
+        prevX = 0,
+        currX = 0,
+        prevY = 0,
+        currY = 0,
+        dot_flag = false;
 
+     var x = color,
+        y = 2;
+ 
      useEffect(() => {
-          if(firstCanvas.current) {
-               console.log(firstCanvas.current.canvas)
-               context = firstCanvas.current.canvas.interface.getContext("2d");
-          }
+          canvas = document.getElementById('newCanvas');
+          ctx = canvas.getContext("2d");
+    
+          canvas.addEventListener("mousemove", function (e) {
+              findxy('move', e)
+          }, false);
+          canvas.addEventListener("mousedown", function (e) {
+              findxy('down', e)
+          }, false);
+          canvas.addEventListener("mouseup", function (e) {
+              findxy('up', e)
+          }, false);
+          canvas.addEventListener("mouseout", function (e) {
+              findxy('out', e)
+          }, false);
+
      });
-// 
-     // var canvas = document.getElementById("newCanvas");
-     // var context1 = canvas.getContext("2d");
-     // var scale = 1;
-     // var originx = 0;
-     // var originy = 0;
-// 
-     // function draw(){
-          // context.fillStyle = "white";
-          // context.fillRect(originx,originy,800/scale,600/scale);
-          // context.fillStyle = "black";
-          // context.fillRect(50,50,100,100);
-     //  }
-     //  setInterval(draw,100);
-// 
-     const zoomIn = () => {
-          if(context) { 
-               let canvas = firstCanvas.current.canvas.interface;
-               var centerx = canvas.width/2;
-               var centery = canvas.height/2;
-           
-               var zoom = 1.5;
-           
-               context.translate(
-                   originx,
-                   originy
-               );
-               context.scale(1,1);
-               context.translate(
-                   -( centerx / scale + originx - centerx / ( scale * zoom ) ),
-                   -( centery / scale + originy - centery / ( scale * zoom ) )
-               );
-           
-               originx = ( centerx / scale + originx - centerx / ( scale * zoom ) );
-               originy = ( centery / scale + originy - centery / ( scale * zoom ) );
-               scale *= 1;
-          }
+ 
+ 
+     const draw = () => {
+          ctx.beginPath();
+          ctx.moveTo(prevX, prevY);
+          ctx.lineTo(currX, currY);
+          ctx.strokeStyle = x;
+          ctx.lineWidth = y;
+          ctx.stroke();
+          ctx.closePath();
      }
      
-     const zoomOut = () => {
-          if(context) { 
-               let canvas = firstCanvas.current.canvas.drawing;
-               var centerx = canvas.width/2;
-               var centery = canvas.height/2;
-               var zoom = -1.5;
-           
-               context.translate(
-                   originx,
-                   originy
-               );
-               context.scale(-1,-1);
-               context.translate(
-                   -( centerx / scale + originx - centerx / ( scale * zoom ) ),
-                   -( centery / scale + originy - centery / ( scale * zoom ) )
-               );
-           
-               originx = ( centerx / scale + originx - centerx / ( scale * zoom ) );
-               originy = ( centery / scale + originy - centery / ( scale * zoom ) );
-               scale *= -1;
+     const erase = () => {
+          var m = confirm("Want to clear");
+          if (m) {
+              ctx.clearRect(0, 0, w, h);
+              document.getElementById("canvasimg").style.display = "none";
+          }
+     }
+
+     const findxy = (res, e) => {
+          if (res == 'down') {
+              prevX = currX;
+              prevY = currY;
+              currX = (e.clientX * scale) - canvas.offsetLeft;
+              currY = (e.clientY * scale) - canvas.offsetTop;
+      
+              flag = true;
+              dot_flag = true;
+              if (dot_flag) {
+                  ctx.beginPath();
+                  ctx.fillStyle = x;
+                  ctx.fillRect(currX, currY, 2, 2);
+                  ctx.closePath();
+                  dot_flag = false;
+              }
+          }
+          if (res == 'up' || res == "out") {
+              flag = false;
+          }
+          if (res == 'move') {
+              if (flag) {
+                  prevX = currX;
+                  prevY = currY;
+                  currX = (e.clientX * scale) - canvas.offsetLeft;
+                  currY = (e.clientY * scale) - canvas.offsetTop;
+                  draw();
+              }
           }
      }
           
@@ -142,18 +136,17 @@ function Canvas() {
      return(
           <>
                <div css={css`
-                  background: gray;
                   width: fit-content;
                `}>
                               <Fragment>
                                    <div className="canvasButton-container tools">
-                                        <div onClick={zoomIn} className="canvas-button">
+                                        <div onClick={() => setScale(scale + 0.1)} className="canvas-button">
                                              <FontAwesomeIcon icon={faPlus} className="canvas-icon" color="white" size="lg"/>
                                         </div>
-                                        <div onClick={zoomOut} className="canvas-button">
+                                        <div onClick={() => setScale(scale - 0.1)} className="canvas-button">
                                              <FontAwesomeIcon icon={faMinus} className="canvas-icon" color="white" size="lg"/>
                                         </div>
-                                        <div onClick={clear} className="canvas-button">
+                                        <div onClick={erase} className="canvas-button">
                                              <FontAwesomeIcon icon={faTrashAlt} className="canvas-icon" color="white" size="lg"/>
                                         </div>
 
@@ -161,9 +154,10 @@ function Canvas() {
                                              <FontAwesomeIcon icon={faUndo} className="canvas-icon" color="white" size="lg"/>
                                         </div>
                                    </div>
-                                        <canvas id="newCanvas">
-
-                                        </canvas>
+                                        <canvas id="newCanvas" width={1080} height={500} css={css`
+                                             background: white;
+                                             transform: scale(${scale});
+                                        `}></canvas>
                               </Fragment>
                </div>
                <Modal>

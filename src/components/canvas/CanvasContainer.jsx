@@ -9,6 +9,7 @@ const CanvasContainer = () =>{
         <div css={css`
             width: calc(100vw - 57px);
             overflow: auto;
+            background: gray;        
         `}>
             <Canvas />
         </div>
