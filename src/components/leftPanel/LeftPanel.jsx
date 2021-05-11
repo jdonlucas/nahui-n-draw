@@ -47,7 +47,7 @@ export default function LeftPanel(){
                     display: ${showBrushSize ? 'block' : 'none'};
                 `}>
                     Brush Size
-                    <input onChange={radiusHandler} type="range" min="1" max="20" step="1" className="input-brushSize"/>
+                    <input onChange={radiusHandler} type="range" min="1" max="20" step="1" value={radius} className="input-brushSize"/>
                 </div>
 
                 <div onClick={() => setShowColor(!showColor)} className="leftPanel-Button"> 

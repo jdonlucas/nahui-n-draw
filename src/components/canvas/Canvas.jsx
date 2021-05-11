@@ -32,7 +32,7 @@ function Canvas() {
 
      const downloadToSVG = () => {
           if(firstCanvas.current) {
-               domtoimage.toJpeg(firstCanvas.current.canvas.drawing, { quality: 0.95 })
+               domtoimage.toJpeg(firstCanvas.current, { quality: 0.95 })
                     .then(function (dataUrl) {
                         var link = document.createElement('a');
                         link.download = 'my-image-name.jpeg';
@@ -43,7 +43,7 @@ function Canvas() {
      }
      const downloadToJPEG = () => {
           if(firstCanvas.current) {
-               domtoimage.toSvg(firstCanvas.current.canvas.drawing, { quality: 0.95 })
+               domtoimage.toSvg(firstCanvas.current, { quality: 0.95 })
                     .then(function (dataUrl) {
                         var link = document.createElement('a');
                         link.download = 'my-image-name.svg';
@@ -53,34 +53,30 @@ function Canvas() {
           }
      }
      
-     var canvas, ctx, flag = false,
+     var ctx, flag = false,
         prevX = 0,
         currX = 0,
         prevY = 0,
         currY = 0,
         dot_flag = false;
 
-     var x = color,
-        y = 2;
+     var x = color;
  
      useEffect(() => {
-          canvas = document.getElementById('newCanvas');
-          ctx = canvas.getContext("2d");
-    
-          canvas.addEventListener("mousemove", function (e) {
-              findxy('move', e)
-          }, false);
-          canvas.addEventListener("mousedown", function (e) {
-              findxy('down', e)
-          }, false);
-          canvas.addEventListener("mouseup", function (e) {
-              findxy('up', e)
-          }, false);
-          canvas.addEventListener("mouseout", function (e) {
-              findxy('out', e)
-          }, false);
-
-     });
+          if(firstCanvas && firstCanvas.current) {
+               ctx = firstCanvas.current.getContext("2d");
+               firstCanvas.current.addEventListener("mousemove", findxyMove);
+               firstCanvas.current.addEventListener("mousedown", findxyDown);
+               firstCanvas.current.addEventListener("mouseup", findxyUpOut);
+               firstCanvas.current.addEventListener("mouseout", findxyUpOut);
+               return () => {
+                    firstCanvas.current.removeEventListener("mousemove", findxyMove);
+                     firstCanvas.current.removeEventListener("mousedown", findxyDown);
+                     firstCanvas.current.removeEventListener("mouseup", findxyUpOut);
+                     firstCanvas.current.removeEventListener("mouseout", findxyUpOut);
+               }
+          }
+     },[firstCanvas,scale,radius,color]);
  
  
      const draw = () => {
@@ -88,7 +84,7 @@ function Canvas() {
           ctx.moveTo(prevX, prevY);
           ctx.lineTo(currX, currY);
           ctx.strokeStyle = x;
-          ctx.lineWidth = y;
+          ctx.lineWidth = radius;
           ctx.stroke();
           ctx.closePath();
      }
@@ -101,34 +97,41 @@ function Canvas() {
           }
      }
 
-     const findxy = (res, e) => {
-          if (res == 'down') {
+     const findxyDown = (e) => {
+          currX = (e.clientX - firstCanvas.current.offsetLeft) / scale;
+          currY = (e.clientY - firstCanvas.current.offsetTop) / scale;
+
+          flag = true;
+          dot_flag = true;
+          if (dot_flag) {
+              ctx.beginPath();
+              ctx.fillStyle = x;
+              ctx.fillRect(currX, currY, 2, 2);
+              ctx.closePath();
+              dot_flag = false;
+          }
+     }
+     
+     const findxyUpOut = (e) => {
+          flag = false;
+     }
+     const findxyMove = (e) => {
+          if (flag) {
               prevX = currX;
               prevY = currY;
-              currX = (e.clientX * scale) - canvas.offsetLeft;
-              currY = (e.clientY * scale) - canvas.offsetTop;
-      
-              flag = true;
-              dot_flag = true;
-              if (dot_flag) {
-                  ctx.beginPath();
-                  ctx.fillStyle = x;
-                  ctx.fillRect(currX, currY, 2, 2);
-                  ctx.closePath();
-                  dot_flag = false;
-              }
+              currX = (e.clientX - firstCanvas.current.offsetLeft) / scale;
+              currY = (e.clientY - firstCanvas.current.offsetTop) / scale;
+              draw();
           }
-          if (res == 'up' || res == "out") {
-              flag = false;
+     }
+     
+
+     const onZoom = (n) => {
+          if (n > 0) {
+               setScale(scale * 1.2) 
           }
-          if (res == 'move') {
-              if (flag) {
-                  prevX = currX;
-                  prevY = currY;
-                  currX = (e.clientX * scale) - canvas.offsetLeft;
-                  currY = (e.clientY * scale) - canvas.offsetTop;
-                  draw();
-              }
+          else {
+               setScale(scale / 1.2)
           }
      }
           
@@ -140,10 +143,10 @@ function Canvas() {
                `}>
                               <Fragment>
                                    <div className="canvasButton-container tools">
-                                        <div onClick={() => setScale(scale + 0.1)} className="canvas-button">
+                                        <div onClick={() => onZoom(1)} className="canvas-button">
                                              <FontAwesomeIcon icon={faPlus} className="canvas-icon" color="white" size="lg"/>
                                         </div>
-                                        <div onClick={() => setScale(scale - 0.1)} className="canvas-button">
+                                        <div onClick={() => onZoom(-1)} className="canvas-button">
                                              <FontAwesomeIcon icon={faMinus} className="canvas-icon" color="white" size="lg"/>
                                         </div>
                                         <div onClick={erase} className="canvas-button">
@@ -154,9 +157,10 @@ function Canvas() {
                                              <FontAwesomeIcon icon={faUndo} className="canvas-icon" color="white" size="lg"/>
                                         </div>
                                    </div>
-                                        <canvas id="newCanvas" width={1080} height={500} css={css`
+                                        <canvas ref={firstCanvas} id="newCanvas" width={1080} height={500} css={css`
                                              background: white;
                                              transform: scale(${scale});
+                                             transform-origin: 0 0;
                                         `}></canvas>
                               </Fragment>
                </div>
