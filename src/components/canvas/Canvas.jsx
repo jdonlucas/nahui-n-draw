@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx,css } from '@emotion/react';
 import React, { useRef, createRef, Fragment, useEffect, useState } from 'react';
-import CanvasDraw from 'react-canvas-draw';
+import NahuiCanvas from 'nahui-react-canvas-draw';
 import {useAtom} from 'jotai';
 import {colorAtom, radiusAtom} from '../../state';
 import domtoimage from 'dom-to-image-more';
@@ -21,10 +21,6 @@ function Canvas() {
      const [scale,setScale] = useState(1);
 
      const firstCanvas = useRef(null);
-
-     const  clear = () => {
-       firstCanvas.current.clear();
-     }
    
      const undo = () => {
        firstCanvas.current.undo();
@@ -53,78 +49,6 @@ function Canvas() {
           }
      }
      
-     var ctx, flag = false,
-        prevX = 0,
-        currX = 0,
-        prevY = 0,
-        currY = 0,
-        dot_flag = false;
-
-     var x = color;
- 
-     useEffect(() => {
-          if(firstCanvas && firstCanvas.current) {
-               ctx = firstCanvas.current.getContext("2d");
-               firstCanvas.current.addEventListener("mousemove", findxyMove);
-               firstCanvas.current.addEventListener("mousedown", findxyDown);
-               firstCanvas.current.addEventListener("mouseup", findxyUpOut);
-               firstCanvas.current.addEventListener("mouseout", findxyUpOut);
-               return () => {
-                    firstCanvas.current.removeEventListener("mousemove", findxyMove);
-                     firstCanvas.current.removeEventListener("mousedown", findxyDown);
-                     firstCanvas.current.removeEventListener("mouseup", findxyUpOut);
-                     firstCanvas.current.removeEventListener("mouseout", findxyUpOut);
-               }
-          }
-     },[firstCanvas,scale,radius,color]);
- 
- 
-     const draw = () => {
-          ctx.beginPath();
-          ctx.moveTo(prevX, prevY);
-          ctx.lineTo(currX, currY);
-          ctx.strokeStyle = x;
-          ctx.lineWidth = radius;
-          ctx.stroke();
-          ctx.closePath();
-     }
-     
-     const erase = () => {
-          var m = confirm("Want to clear");
-          if (m) {
-              ctx.clearRect(0, 0, w, h);
-              document.getElementById("canvasimg").style.display = "none";
-          }
-     }
-
-     const findxyDown = (e) => {
-          currX = (e.clientX - firstCanvas.current.offsetLeft) / scale;
-          currY = (e.clientY - firstCanvas.current.offsetTop) / scale;
-
-          flag = true;
-          dot_flag = true;
-          if (dot_flag) {
-              ctx.beginPath();
-              ctx.fillStyle = x;
-              ctx.fillRect(currX, currY, 2, 2);
-              ctx.closePath();
-              dot_flag = false;
-          }
-     }
-     
-     const findxyUpOut = (e) => {
-          flag = false;
-     }
-     const findxyMove = (e) => {
-          if (flag) {
-              prevX = currX;
-              prevY = currY;
-              currX = (e.clientX - firstCanvas.current.offsetLeft) / scale;
-              currY = (e.clientY - firstCanvas.current.offsetTop) / scale;
-              draw();
-          }
-     }
-     
 
      const onZoom = (n) => {
           if (n > 0) {
@@ -149,7 +73,7 @@ function Canvas() {
                                         <div onClick={() => onZoom(-1)} className="canvas-button">
                                              <FontAwesomeIcon icon={faMinus} className="canvas-icon" color="white" size="lg"/>
                                         </div>
-                                        <div onClick={erase} className="canvas-button">
+                                        <div className="canvas-button">
                                              <FontAwesomeIcon icon={faTrashAlt} className="canvas-icon" color="white" size="lg"/>
                                         </div>
 
@@ -157,11 +81,7 @@ function Canvas() {
                                              <FontAwesomeIcon icon={faUndo} className="canvas-icon" color="white" size="lg"/>
                                         </div>
                                    </div>
-                                        <canvas ref={firstCanvas} id="newCanvas" width={1080} height={500} css={css`
-                                             background: white;
-                                             transform: scale(${scale});
-                                             transform-origin: 0 0;
-                                        `}></canvas>
+                                        <NahuiCanvas scale={scale} brushSize={radius} color={color} />
                               </Fragment>
                </div>
                <Modal>
