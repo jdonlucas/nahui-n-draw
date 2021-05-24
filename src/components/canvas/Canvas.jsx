@@ -1,14 +1,14 @@
 /** @jsx jsx */
 import { jsx,css } from '@emotion/react';
 import React, { useRef, createRef, Fragment, useEffect, useState } from 'react';
-import NahuiCanvas from 'nahui-react-canvas-draw';
+import {NahuiCanvas} from 'nahui-react-canvas-draw';
 import {useAtom} from 'jotai';
 import {colorAtom, radiusAtom} from '../../state';
 import domtoimage from 'dom-to-image-more';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 //FontAwesome
 import { faTrashAlt, faUndo, faPlus, faMinus,
-     faFilePdf, faFileImage } from "@fortawesome/free-solid-svg-icons";
+     faFilePdf, faFileImage, faEraser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Modal from '../Modal';
@@ -27,8 +27,9 @@ function Canvas() {
      } 
 
      const downloadToSVG = () => {
-          if(firstCanvas.current) {
-               domtoimage.toJpeg(firstCanvas.current, { quality: 0.95 })
+          let canvas = firstCanvas.current.canvas();
+          if(canvas) {
+               domtoimage.toJpeg(canvas, { quality: 0.95 })
                     .then(function (dataUrl) {
                         var link = document.createElement('a');
                         link.download = 'my-image-name.jpeg';
@@ -38,8 +39,9 @@ function Canvas() {
           }
      }
      const downloadToJPEG = () => {
-          if(firstCanvas.current) {
-               domtoimage.toSvg(firstCanvas.current, { quality: 0.95 })
+          let canvas = firstCanvas.current.canvas();
+          if(canvas) {
+               domtoimage.toSvg(canvas, { quality: 0.95 })
                     .then(function (dataUrl) {
                         var link = document.createElement('a');
                         link.download = 'my-image-name.svg';
@@ -58,6 +60,10 @@ function Canvas() {
                setScale(scale / 1.2)
           }
      }
+
+     const cleanCanvas = () => {
+          firstCanvas.current.erase()
+     }
           
 
      return(
@@ -73,7 +79,7 @@ function Canvas() {
                                         <div onClick={() => onZoom(-1)} className="canvas-button">
                                              <FontAwesomeIcon icon={faMinus} className="canvas-icon" color="white" size="lg"/>
                                         </div>
-                                        <div className="canvas-button">
+                                        <div onClick={() => cleanCanvas()} className="canvas-button">
                                              <FontAwesomeIcon icon={faTrashAlt} className="canvas-icon" color="white" size="lg"/>
                                         </div>
 
@@ -81,7 +87,7 @@ function Canvas() {
                                              <FontAwesomeIcon icon={faUndo} className="canvas-icon" color="white" size="lg"/>
                                         </div>
                                    </div>
-                                        <NahuiCanvas scale={scale} brushSize={radius} color={color} />
+                                        <NahuiCanvas ref={firstCanvas} scale={scale} brushSize={radius} color={color} />
                               </Fragment>
                </div>
                <Modal>
