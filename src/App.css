@@ -64,6 +64,12 @@
   padding: 2em;
 }
 
+/* Left panel tools */
+.leftPanelTools {
+  position: absolute;
+  left: 100px;
+}
+
 /*Canvas styles*/
 .canvasButton-container{
   align-items: flex-start;
